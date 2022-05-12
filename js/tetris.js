@@ -1,13 +1,17 @@
 const board = document.querySelector(".board");
 const rowCount = 20;
 const columnCount = 10;
+const speed = 1200;
 let movingElem;
 
 init();
+// 자동내려옴
+setInterval(() => {
+    if (movingElem) moving("down");
+}, speed);
 
 document.addEventListener("keydown", (e) => {
     let type = e.key;
-    movingElem = document.querySelectorAll(".moving");
     switch (type) {
         case "ArrowLeft":
             moving("left");
@@ -26,6 +30,7 @@ document.addEventListener("keydown", (e) => {
 //방향키 입력한대로 움직이기 ← → (임시 ↓)
 //도형에 닿았을때도 fix되어야 함
 function moving(type) {
+    movingElem = document.querySelectorAll(".moving");
     try {
         switch (type) {
             case "left":
