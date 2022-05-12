@@ -1,0 +1,32 @@
+body {
+	text-align: center;
+}
+
+.container {
+}
+
+.score {
+	font-size: 1.5rem;
+}
+
+.board {
+	
+	border: 1px solid #e5e9f0;
+
+	
+}
+
+.row {
+	display: flex;
+	justify-content: center;
+}
+
+.column {
+	border: 1px solid #d8dee9;
+	height: 2rem;
+	width: 2rem;
+}
+
+.moving {
+	background-color: #bf616a;
+}
