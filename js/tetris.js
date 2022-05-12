@@ -9,24 +9,21 @@ document.addEventListener("keydown", (e) => {
     let type = e.key;
     movingElem = document.querySelectorAll(".moving");
     switch (type) {
-        //방향키 입력한대로 움직이기 ← → (임시 ↓)
         case "ArrowLeft":
             moving("left");
-
             break;
-
         case "ArrowRight":
             moving("right");
-
             break;
-
         case "ArrowDown":
-
+            moving("down");
+            break;
         case "ArrowUp":
         //도형 모양 바꾸기 ↑
     }
 });
 
+//방향키 입력한대로 움직이기 ← → (임시 ↓)
 function moving(type) {
     try {
         switch (type) {
@@ -45,6 +42,26 @@ function moving(type) {
                 movingElem.forEach((e) => {
                     e.nextSibling.classList.add("moving");
                 });
+                break;
+            case "down":
+                if (
+                    document
+                        .querySelectorAll(".row")
+                        [rowCount - 1].querySelector(".moving")
+                ) {
+                    movingElem.forEach((e) => {
+                        e.classList.remove("moving");
+                        e.classList.add("fixed");
+                    });
+                } else if (
+                    !document
+                        .querySelectorAll(".row")
+                        [rowCount - 1].querySelector(".fixed")
+                ) {
+                    document.querySelectorAll(".row")[rowCount - 1].remove();
+                    addNewRow();
+                }
+
                 break;
         }
     } catch {

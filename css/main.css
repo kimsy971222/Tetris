@@ -27,6 +27,6 @@ body {
 	width: 2rem;
 }
 
-.moving {
+.moving, .fixed {
 	background-color: #bf616a;
 }
