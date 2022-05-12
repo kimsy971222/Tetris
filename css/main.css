@@ -30,3 +30,7 @@ body {
 .moving, .fixed {
 	background-color: #bf616a;
 }
+
+button {
+	font-size: 2rem;
+}

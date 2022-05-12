@@ -31,6 +31,16 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+document.querySelector(".buttonLeft").addEventListener("click", () => {
+    moving("left");
+});
+document.querySelector(".buttonDown").addEventListener("click", () => {
+    moving("down");
+});
+document.querySelector(".buttonRight").addEventListener("click", () => {
+    moving("right");
+});
+
 function checkGameOver() {
     if (document.querySelectorAll(".moving.fixed").length > 0) {
         document.querySelector(".score").innerHTML = 0;
