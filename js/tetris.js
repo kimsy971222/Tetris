@@ -7,7 +7,9 @@ let movingElem;
 init();
 // 자동내려옴
 setInterval(() => {
-    if (movingElem) moving("down");
+    if (movingElem && movingElem.length > 0) moving("down");
+    else setBlock(Math.floor(Math.random() * 7));
+    checkMath();
 }, speed);
 
 document.addEventListener("keydown", (e) => {
@@ -27,7 +29,59 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-//방향키 입력한대로 움직이기 ← → (임시 ↓)
+function checkMath() {
+    let rows = document.querySelectorAll(".row");
+
+    rows.forEach((row) => {
+        if (row.querySelectorAll(".fixed").length == 10) {
+            row.remove();
+            addNewRow();
+        }
+    });
+}
+
+function setBlock(type) {
+    let markIdx;
+    switch (type) {
+        case 0:
+            markIdx = [[0], [0], [0], [0]];
+            break;
+        case 1:
+            markIdx = [[0, 1], [0], [0]];
+            break;
+        case 2:
+            markIdx = [[0, 1], [1], [1]];
+            break;
+        case 3:
+            markIdx = [
+                [0, 1],
+                [0, 1],
+            ];
+            break;
+
+        case 4:
+            markIdx = [[0], [0, 1], [1]];
+            break;
+
+        case 5:
+            markIdx = [[1], [0, 1, 2]];
+            break;
+
+        case 6:
+            markIdx = [[1], [0, 1], [0]];
+            break;
+    }
+    markIdx.forEach((row, rowIdx) => {
+        row.forEach((columnIdx) => {
+            document
+                .querySelectorAll(".row")
+                [rowIdx].childNodes[columnIdx].classList.add("moving");
+        });
+    });
+    movingElem = document.querySelectorAll(".moving");
+}
+
+//방향키 입력한대로 움직이기 ← → ↓
 //도형에 닿았을때도 fix되어야 함
 function moving(type) {
     movingElem = document.querySelectorAll(".moving");
@@ -71,7 +125,6 @@ function moving(type) {
                             let nextElem =
                                 parentRow.nextSibling.childNodes[columnIdx];
 
-                            //도형에 닿았을 때
                             if (nextElem.classList.contains("fixed")) {
                                 throw new Error("touched");
                             }
@@ -80,9 +133,15 @@ function moving(type) {
                         });
                     });
                 } catch {
+                    //도형에 닿았을 때
+                    document.querySelectorAll(".moving").forEach((e) => {
+                        e.classList.remove("moving");
+                    });
+
                     movingElem.forEach((e) => {
                         e.classList.add("fixed");
                     });
+                    movingElem = null;
                 }
 
                 //바닥에 닿았을때
@@ -95,6 +154,7 @@ function moving(type) {
                         e.classList.remove("moving");
                         e.classList.add("fixed");
                     });
+                    movingElem = null;
                 }
 
                 break;
