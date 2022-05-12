@@ -5,12 +5,13 @@ const speed = 500;
 let movingElem;
 
 init();
+
 // 자동내려옴
-setInterval(() => {
-    if (movingElem && movingElem.length > 0) moving("down");
-    else setBlock(Math.floor(Math.random() * 7));
-    checkGameOver();
-    checkMath();
+setInterval(async () => {
+    if (movingElem && movingElem.length > 0) await moving("down");
+    else await setBlock(Math.floor(Math.random() * 7));
+    await checkGameOver();
+    await checkMath();
 }, speed);
 
 document.addEventListener("keydown", (e) => {
