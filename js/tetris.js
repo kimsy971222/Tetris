@@ -24,6 +24,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 //방향키 입력한대로 움직이기 ← → (임시 ↓)
+//도형에 닿았을때도 fix되어야 함
 function moving(type) {
     try {
         switch (type) {
@@ -44,22 +45,51 @@ function moving(type) {
                 });
                 break;
             case "down":
+                let parentRows = Array.from(
+                    new Set(Array.from(movingElem).map((e) => e.parentElement))
+                );
+                let columnIdx = [];
+                parentRows.forEach((parentRow) => {
+                    let _columnIdx = [];
+                    parentRow.childNodes.forEach((e, i) => {
+                        if (e.classList.contains("moving")) _columnIdx.push(i);
+                    });
+                    columnIdx.push(_columnIdx);
+                });
+
+                movingElem.forEach((e) => {
+                    e.classList.remove("moving");
+                });
+                try {
+                    parentRows.forEach((parentRow, rowIdx) => {
+                        columnIdx[rowIdx].forEach((columnIdx) => {
+                            let nextElem =
+                                parentRow.nextSibling.childNodes[columnIdx];
+
+                            //도형에 닿았을 때
+                            if (nextElem.classList.contains("fixed")) {
+                                throw new Error("touched");
+                            }
+
+                            nextElem.classList.add("moving");
+                        });
+                    });
+                } catch {
+                    movingElem.forEach((e) => {
+                        e.classList.add("fixed");
+                    });
+                }
+
+                //바닥에 닿았을때
                 if (
                     document
                         .querySelectorAll(".row")
                         [rowCount - 1].querySelector(".moving")
                 ) {
-                    movingElem.forEach((e) => {
+                    document.querySelectorAll(".moving").forEach((e) => {
                         e.classList.remove("moving");
                         e.classList.add("fixed");
                     });
-                } else if (
-                    !document
-                        .querySelectorAll(".row")
-                        [rowCount - 1].querySelector(".fixed")
-                ) {
-                    document.querySelectorAll(".row")[rowCount - 1].remove();
-                    addNewRow();
                 }
 
                 break;
