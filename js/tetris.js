@@ -1,7 +1,7 @@
 const board = document.querySelector(".board");
 const rowCount = 20;
 const columnCount = 10;
-const speed = 1200;
+const speed = 500;
 let movingElem;
 
 init();
@@ -9,6 +9,7 @@ init();
 setInterval(() => {
     if (movingElem && movingElem.length > 0) moving("down");
     else setBlock(Math.floor(Math.random() * 7));
+    checkGameOver();
     checkMath();
 }, speed);
 
@@ -29,13 +30,22 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+function checkGameOver() {
+    if (document.querySelectorAll(".moving.fixed").length > 0) {
+        document.querySelector(".score").innerHTML = 0;
+        init();
+    }
+}
+
 function checkMath() {
     let rows = document.querySelectorAll(".row");
+    let score = document.querySelector(".score").innerHTML;
 
     rows.forEach((row) => {
         if (row.querySelectorAll(".fixed").length == 10) {
             row.remove();
             addNewRow();
+            document.querySelector(".score").innerHTML = score * 1 + 10;
         }
     });
 }
@@ -168,6 +178,7 @@ function moving(type) {
 
 //테트리스 판 작성
 function init() {
+    document.querySelectorAll(".row").forEach((row) => row.remove());
     for (let i = 0; i < rowCount; i++) {
         addNewRow();
     }
